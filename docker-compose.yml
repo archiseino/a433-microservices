@@ -5,7 +5,7 @@ services:
   # The application service that runs our Node.js app. The image should be the
   # published image on Docker Hub (or GitHub Packages) in the format username/name:tag.
   item-app:
-    image: item-app:v1
+    image: archise1/item-app:v1
     # Automatically restart the container if it stops (useful for simple deployments).
     restart: always
     # Map host port 80 to container port 8080 so the app is reachable at http://localhost
