@@ -1,0 +1,29 @@
+version: '2'
+
+# Define application services and named volumes using Docker Compose v2 syntax.
+services:
+  # The application service that runs our Node.js app. The image should be the
+  # published image on Docker Hub (or GitHub Packages) in the format username/name:tag.
+  item-app:
+    image: item-app:v1
+    # Automatically restart the container if it stops (useful for simple deployments).
+    restart: always
+    # Map host port 80 to container port 8080 so the app is reachable at http://localhost
+    ports:
+      - '80:8080'
+    # Ensure the database service is started before the app (compose v2 uses a simple start order).
+    depends_on:
+      - item-db
+
+  # The MongoDB database service used by the application.
+  item-db:
+    # Use the official MongoDB 3 image from Docker Hub.
+    image: mongo:3
+    restart: always
+    # Persist MongoDB data on a named volume mounted at /data/db inside the container.
+    volumes:
+      - app-db:/data/db
+
+# Define named volumes to persist data outside of the container lifecycle.
+volumes:
+  app-db:
