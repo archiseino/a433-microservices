@@ -15,10 +15,6 @@ spec:
     # selector mencocokkan label Pod yang dilayani oleh Service ini
     app: karsajobs
   ports:
-    - protocol: TCP
-      # port: port yang diekspos oleh Service di dalam cluster
-      port: 80
-      # targetPort: port pada container Pod yang menerima trafik
-      targetPort: 8080
+    - port: 8080
       # nodePort: port yang bisa diakses dari luar cluster via <NodeIP>:<nodePort>
       nodePort: 30020

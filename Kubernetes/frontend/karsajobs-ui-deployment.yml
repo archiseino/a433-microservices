@@ -24,7 +24,7 @@ spec:
           image: archise1/karsajobs-ui:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 80
+            - containerPort: 8000
           env:
             # Set backend URL using cluster DNS: <service-name>:<service-port>
             # Here we point to the backend Service `karsajobs-service` (ClusterIP:80 -> targetPort 8080)

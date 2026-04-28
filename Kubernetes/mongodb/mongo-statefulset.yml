@@ -32,10 +32,10 @@ spec:
             - name: MONGO_INITDB_ROOT_PASSWORD_FILE
               value: '/etc/mongo-credentials/MONGO_ROOT_PASSWORD'
           volumeMounts:
-            - name: data
+            - name: mongo-persist-vol
               # mountPath: persistent volume untuk data MongoDB
               mountPath: /data/db
-            - name: config
+            - name: mongo-confg-vol
               # mount ConfigMap (mongo.conf) ke dalam container
               mountPath: /config
             - name: mongo-credentials
@@ -43,7 +43,10 @@ spec:
               mountPath: /etc/mongo-credentials
       # Volumes tambahan: ConfigMap dan Secret
       volumes:
-        - name: config
+        - name: mongo-persist-vol
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+        - name: mongo-confg-vol
           configMap:
             name: mongo-config
             items:
@@ -52,12 +55,3 @@ spec:
         - name: mongo-credentials
           secret:
             secretName: mongo-secret
-  # volumeClaimTemplates: setiap Pod StatefulSet akan membuat PVC dari template ini
-  volumeClaimTemplates:
-    - metadata:
-        name: data
-      spec:
-        accessModes: ['ReadWriteOnce']
-        resources:
-          requests:
-            storage: 1Gi
