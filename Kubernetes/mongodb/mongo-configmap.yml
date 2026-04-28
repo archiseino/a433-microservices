@@ -1,0 +1,10 @@
+## ConfigMap yang berisi file konfigurasi MongoDB (mongo.conf)
+# Data diperlakukan sebagai file `mongo.conf` sehingga bisa di-mount ke pod
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+data:
+  mongo.conf: |
+    storage:
+      dbPath: /data/db

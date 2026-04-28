@@ -1,0 +1,49 @@
+# Deployment untuk backend `karsajobs`
+# apiVersion: versi API Kubernetes yang digunakan untuk resource ini
+# kind: jenis resource (Deployment mengelola ReplicaSets dan Pods)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # name: nama resource dalam namespace
+  name: karsajobs-deployment
+  labels:
+    # label umum untuk identifikasi resource
+    app: karsajobs
+spec:
+  # replicas: jumlah Pod yang diinginkan
+  replicas: 2
+  selector:
+    # selector menentukan Pod mana yang termasuk dalam Deployment ini
+    matchLabels:
+      app: karsajobs
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+    spec:
+      containers:
+        - name: karsajobs
+          # image: nama image yang dijalankan pada container
+          image: archise1/karsajobs:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_PORT
+              # value: memberikan nilai environment variable di dalam container
+              value: '8080'
+            - name: MONGO_HOST
+              # MONGO_HOST: gunakan nama Service MongoDB sehingga DNS cluster bisa menyelesaikannya
+              value: 'mongo'
+            - name: MONGO_USER
+              # Ambil username dari Secret `mongo-secret` (key: MONGO_ROOT_USERNAME)
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_ROOT_USERNAME
+            - name: MONGO_PASS
+              # Ambil password dari Secret `mongo-secret` (key: MONGO_ROOT_PASSWORD)
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_ROOT_PASSWORD

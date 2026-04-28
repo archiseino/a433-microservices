@@ -1,0 +1,7 @@
+## Namespace untuk monitoring
+# Menempatkan semua resource monitoring (Prometheus, Grafana) ke namespace terpisah
+apiVersion: v1
+kind: Namespace
+metadata:
+  # name: nama namespace yang dibuat
+  name: monitoring

@@ -1,0 +1,63 @@
+## StatefulSet untuk MongoDB
+# StatefulSet cocok untuk workload yang membutuhkan identitas jaringan dan storage persisten per-Pod
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  # serviceName: Service headless yang digunakan untuk mengontrol DNS nama Pod
+  serviceName: 'mongo'
+  # replicas: jumlah instance Mongo (1 untuk contoh sederhana)
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          # image: versi image MongoDB yang digunakan
+          image: mongo:4.4
+          ports:
+            - containerPort: 27017
+          env:
+            # Gunakan _FILE variant agar nilai rahasia dibaca dari file yang dimount dari Secret
+            - name: MONGO_INITDB_ROOT_USERNAME_FILE
+              value: '/etc/mongo-credentials/MONGO_ROOT_USERNAME'
+            - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+              value: '/etc/mongo-credentials/MONGO_ROOT_PASSWORD'
+          volumeMounts:
+            - name: data
+              # mountPath: persistent volume untuk data MongoDB
+              mountPath: /data/db
+            - name: config
+              # mount ConfigMap (mongo.conf) ke dalam container
+              mountPath: /config
+            - name: mongo-credentials
+              # mount Secret sebagai file berisi credential
+              mountPath: /etc/mongo-credentials
+      # Volumes tambahan: ConfigMap dan Secret
+      volumes:
+        - name: config
+          configMap:
+            name: mongo-config
+            items:
+              - key: mongo.conf
+                path: mongo.conf
+        - name: mongo-credentials
+          secret:
+            secretName: mongo-secret
+  # volumeClaimTemplates: setiap Pod StatefulSet akan membuat PVC dari template ini
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ['ReadWriteOnce']
+        resources:
+          requests:
+            storage: 1Gi

@@ -1,0 +1,18 @@
+## Headless Service untuk MongoDB StatefulSet
+# clusterIP: None membuat Service headless — memudahkan StatefulSet mengatur DNS per-Pod
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  clusterIP: None
+  selector:
+    app: mongo
+  ports:
+    - protocol: TCP
+      # port: port yang diekspos di dalam cluster
+      port: 27017
+      # targetPort: port container MongoDB
+      targetPort: 27017

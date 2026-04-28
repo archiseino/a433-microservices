@@ -1,0 +1,17 @@
+## ConfigMap berisi konfigurasi Prometheus
+## File `prometheus.yml` akan dipasang ke dalam container Prometheus
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: monitoring
+data:
+  prometheus.yml: |
+    # global: pengaturan global Prometheus
+    global:
+      scrape_interval: 15s
+    # scrape_configs: daftar job yang akan dipantau Prometheus
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']

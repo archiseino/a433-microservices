@@ -1,0 +1,24 @@
+## Service untuk backend karsajobs
+# apiVersion: versi API (v1 untuk Service)
+# kind: Service mendefinisikan layanan jaringan di dalam cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: karsajobs-service
+  labels:
+    app: karsajobs
+spec:
+  # type: NodePort mengekspos service lewat port tinggi pada Node (30000-32767)
+  # Ini memudahkan akses dari luar cluster tanpa memakai port 80 di host.
+  type: NodePort
+  selector:
+    # selector mencocokkan label Pod yang dilayani oleh Service ini
+    app: karsajobs
+  ports:
+    - protocol: TCP
+      # port: port yang diekspos oleh Service di dalam cluster
+      port: 80
+      # targetPort: port pada container Pod yang menerima trafik
+      targetPort: 8080
+      # nodePort: port yang bisa diakses dari luar cluster via <NodeIP>:<nodePort>
+      nodePort: 30020

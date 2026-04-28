@@ -1,0 +1,31 @@
+## PersistentVolume (PV) untuk MongoDB
+# PV menyediakan storage fisik di node (hostPath dipakai untuk dev/minikube)
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+spec:
+  # capacity: total storage yang disediakan
+  capacity:
+    storage: 1Gi
+  # accessModes: bagaimana volume diakses (ReadWriteOnce biasa untuk database)
+  accessModes:
+    - ReadWriteOnce
+  # persistentVolumeReclaimPolicy: apakah data disimpan setelah PVC dihapus
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    # path pada host node (gunakan hanya untuk pengujian lokal)
+    path: /data/mongo
+---
+## PersistentVolumeClaim (PVC) — permintaan storage oleh Pod
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # storage yang diminta oleh Pod
+      storage: 1Gi

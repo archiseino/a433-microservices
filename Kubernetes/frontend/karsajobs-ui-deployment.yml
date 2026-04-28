@@ -1,0 +1,32 @@
+## Deployment untuk frontend karsajobs-ui
+# apiVersion: apps/v1 -> resource Deployment
+# kind: Deployment -> mengelola ReplicaSet dan Pod
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-ui-deployment
+  labels:
+    app: karsajobs-ui
+spec:
+  # replicas: jumlah Pod yang akan dijalankan
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karsajobs-ui
+  template:
+    metadata:
+      labels:
+        app: karsajobs-ui
+    spec:
+      containers:
+        - name: karsajobs-ui
+          # image: image container untuk frontend
+          image: archise1/karsajobs-ui:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            # Set backend URL using cluster DNS: <service-name>:<service-port>
+            # Here we point to the backend Service `karsajobs-service` (ClusterIP:80 -> targetPort 8080)
+            - name: VUE_APP_BACKEND
+              value: 'http://karsajobs-service:80'

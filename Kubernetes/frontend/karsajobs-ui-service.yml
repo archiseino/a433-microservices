@@ -1,0 +1,20 @@
+## Service untuk frontend karsajobs-ui
+# Service tipe ClusterIP tersedia hanya di dalam cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: karsajobs-ui-service
+  labels:
+    app: karsajobs-ui
+spec:
+  type: NodePort
+  selector:
+    app: karsajobs-ui
+  ports:
+    - protocol: TCP
+      # port: port service dalam cluster
+      port: 80
+      # targetPort: port pada container frontend
+      targetPort: 80
+      # nodePort: expose the service on this port on each Node (30000-32767)
+      nodePort: 30010
