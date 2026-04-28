@@ -15,6 +15,6 @@ spec:
       # port: port service dalam cluster
       port: 80
       # targetPort: port pada container frontend
-      targetPort: 80
+      targetPort: 8000
       # nodePort: expose the service on this port on each Node (30000-32767)
       nodePort: 30010
