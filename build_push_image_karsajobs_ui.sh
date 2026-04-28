@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail   
+set -euo pipefail
 
 ## Konfigurasi image
 image_name="karsajobs-ui"
@@ -19,10 +19,10 @@ echo "Step 2: Login to Docker Hub (you may be prompted for credentials)"
 docker login
 
 ## Verifikasi image lokal dan push ke Docker Hub
-echo 
+echo
 echo "Step 3: Verifying local image and pushing: ${package_name}"
 docker images "${image_name}"
 docker push "${package_name}"
 
 echo
-echo "Done — if push succeeded, image is at: https://hub.docker.com/r
+echo "Done — if push succeeded, image is at: https://hub.docker.com/r/${docker_username}/${image_name}"
