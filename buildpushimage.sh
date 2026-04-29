@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Define package name
-$package_name=archise1/order-service:latest
+package_name="archise1/order-service:latest"
 
 # Build the Docker image
 docker build -t $package_name .
@@ -13,4 +13,4 @@ docker login
 docker images $package_name
 docker push $package_name
 
-echo "image was successfully built and can be viewed on docker.io/archise1/order-service:latest"
+echo "image was successfully built and can be viewed on hub.docker.com/r/archise1/order-service"
